@@ -1,0 +1,134 @@
+/*
+  Expansion for 
+  val future1: Future[Int] = Future.successful(40)
+  val future2: Future[Int] = Future.successful(2)
+
+  val asyncComputation = async {
+    await(future1) + await(future2)
+  }
+*/
+
+{
+  class stateMachine$macro$1 extends AnyRef with scala.util.Try[Any] => Unit with () => Unit {
+    <synthetic> <stable> private[this] var await$macro$3$macro$7: Int = _;
+    <synthetic> <stable> private[this] var await$macro$5$macro$8: Int = _;
+    def <init>(): stateMachine$macro$1 = {
+      stateMachine$macro$1.super.<init>();
+      ()
+    };
+    private[this] var state: Int = 0;
+    private[this] val result: scala.concurrent.Promise[Int] = Promise.apply[Int]();
+    <stable> <accessor> def result: scala.concurrent.Promise[Int] = stateMachine$macro$1.this.result;
+    private[this] val execContext: scala.concurrent.ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global;
+    <stable> <accessor> def execContext: scala.concurrent.ExecutionContextExecutor = stateMachine$macro$1.this.execContext;
+    def apply(tr: scala.util.Try[Any]): Unit = while$macro$11(){
+      try {
+        stateMachine$macro$1.this.state match {
+          case 0 => {
+            <synthetic> val awaitable$macro$2: scala.concurrent.Future[Int] = SampleAsyncSamples.this.future1;
+            stateMachine$macro$1.this.state = 1;
+            val completed$macro$9: scala.util.Try[Any] = if (awaitable$macro$2.isCompleted)
+              awaitable$macro$2.value.get
+            else
+              null;
+            if (null.ne(completed$macro$9))
+              {
+                if (completed$macro$9.isFailure)
+                  {
+                    stateMachine$macro$1.this.result.complete(completed$macro$9.asInstanceOf[scala.util.Try[Int]]);
+                    return ()
+                  }
+                else
+                  {
+                    stateMachine$macro$1.this.await$macro$3$macro$7 = completed$macro$9.get.asInstanceOf[Int];
+                    stateMachine$macro$1.this.state = 2
+                  };
+                ()
+              }
+            else
+              {
+                awaitable$macro$2.onComplete[Unit](this)(stateMachine$macro$1.this.execContext);
+                return ()
+              };
+            ()
+          }
+          case 2 => {
+            <synthetic> val awaitable$macro$4: scala.concurrent.Future[Int] = SampleAsyncSamples.this.future2;
+            stateMachine$macro$1.this.state = 3;
+            val completed$macro$10: scala.util.Try[Any] = if (awaitable$macro$4.isCompleted)
+              awaitable$macro$4.value.get
+            else
+              null;
+            if (null.ne(completed$macro$10))
+              {
+                if (completed$macro$10.isFailure)
+                  {
+                    stateMachine$macro$1.this.result.complete(completed$macro$10.asInstanceOf[scala.util.Try[Int]]);
+                    return ()
+                  }
+                else
+                  {
+                    stateMachine$macro$1.this.await$macro$5$macro$8 = completed$macro$10.get.asInstanceOf[Int];
+                    stateMachine$macro$1.this.state = 4
+                  };
+                ()
+              }
+            else
+              {
+                awaitable$macro$4.onComplete[Unit](this)(stateMachine$macro$1.this.execContext);
+                return ()
+              };
+            ()
+          }
+          case 4 => {
+            {
+              stateMachine$macro$1.this.result.complete(Success.apply[Int]({
+                <synthetic> val x$macro$6: Int = stateMachine$macro$1.this.await$macro$5$macro$8;
+                stateMachine$macro$1.this.await$macro$3$macro$7.+(x$macro$6)
+              }));
+              ()
+            };
+            return ()
+          }
+          case 1 => {
+            if (tr.isFailure)
+              {
+                stateMachine$macro$1.this.result.complete(tr.asInstanceOf[scala.util.Try[Int]]);
+                return ()
+              }
+            else
+              {
+                stateMachine$macro$1.this.await$macro$3$macro$7 = tr.get.asInstanceOf[Int];
+                stateMachine$macro$1.this.state = 2
+              };
+            ()
+          }
+          case 3 => {
+            if (tr.isFailure)
+              {
+                stateMachine$macro$1.this.result.complete(tr.asInstanceOf[scala.util.Try[Int]]);
+                return ()
+              }
+            else
+              {
+                stateMachine$macro$1.this.await$macro$5$macro$8 = tr.get.asInstanceOf[Int];
+                stateMachine$macro$1.this.state = 4
+              };
+            ()
+          }
+          case _ => throw new IllegalStateException()
+        }
+      } catch {
+        case (throwable @ (_: Throwable)) => {
+          stateMachine$macro$1.this.result.complete(Failure.apply[Int](throwable));
+          return ()
+        }
+      };
+      while$macro$11()
+    };
+    def apply: Unit = stateMachine$macro$1.this.apply(null)
+  };
+  val stateMachine$macro$1 = new stateMachine$macro$1();
+  Future.apply(stateMachine$macro$1.apply())(stateMachine$macro$1.execContext);
+  stateMachine$macro$1.result.future
+}
