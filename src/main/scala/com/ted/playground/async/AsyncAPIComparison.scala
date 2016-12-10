@@ -1,8 +1,10 @@
+package com.ted.playground.async
+
 import scala.async.Async._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object SampleAsyncSamples {
+object AsyncAPIComparison {
 
   val future1: Future[Int] = Future.successful(40)
   val future2: Future[Int] = Future.successful(2)
