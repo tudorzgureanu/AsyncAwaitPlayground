@@ -1,2 +1,2 @@
 # AsyncAwaitPlayground
-Playing around with AsyncAwait library in Scala
+Playing around with [scala-async](https://github.com/scala/async) library in Scala
